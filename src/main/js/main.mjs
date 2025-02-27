@@ -1,0 +1,3 @@
+import 'fast-text-encoding';
+
+export * as QRCode from 'qrcode'; // qrcode/lib/server.js
