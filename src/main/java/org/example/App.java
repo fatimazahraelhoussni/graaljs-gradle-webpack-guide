@@ -22,7 +22,7 @@ public class App {
 
             Path bundlePath = Paths.get("build/classes/bundle/bundle.mjs");
             if (!bundlePath.toFile().exists()) {
-                throw new RuntimeException("Fichier bundle.mjs non trouvé à l'emplacement : " + bundlePath);
+                throw new RuntimeException("Bundle file bundle.mjs not found at location: " + bundlePath);
             }
 
             Source bundleSrc = Source.newBuilder("js", bundlePath.toFile()).build();
