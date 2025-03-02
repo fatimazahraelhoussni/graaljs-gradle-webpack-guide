@@ -1,7 +1,6 @@
 package org.example;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
@@ -20,14 +19,10 @@ public class App {
                 .option("js.unhandled-rejections", "throw")
                 .build()) {
 
-            Path bundlePath = Paths.get("build/classes/bundle/bundle.mjs");
-            if (!bundlePath.toFile().exists()) {
-                throw new RuntimeException("Bundle file bundle.mjs not found at location: " + bundlePath);
-            }
 
-            Source bundleSrc = Source.newBuilder("js", bundlePath.toFile()).build();
+
+            Source bundleSrc = Source.newBuilder("js", App.class.getResource("/bundle/bundle.mjs")).build();
             Value exports = context.eval(bundleSrc);
-
             String input = args.length > 0 ? args[0] : "https://www.graalvm.org/javascript/";
             QRCode qrCode = exports.getMember("QRCode").as(QRCode.class);
             Promise resultPromise = qrCode.toString(input);

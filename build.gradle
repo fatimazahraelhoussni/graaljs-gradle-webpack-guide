@@ -6,7 +6,7 @@ plugins {
     id 'com.github.node-gradle.node' version '7.0.1'
 }
 
-group = 'com.example'
+group = 'org.example'
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -43,20 +43,36 @@ node {
     workDir = file('src/main/js')
 }
 
-
-
 tasks.register('webpackBuild', NpmTask) {
     workingDir = file('src/main/js')
     args = ['run', 'build']
-    environment = ['BUILD_DIR': "${buildDir}/classes/bundle"]
+    environment = ['BUILD_DIR': "${buildDir}/resources/main/bundle"]
 }
-
 
 build.dependsOn tasks.webpackBuild
 
+tasks.register('copyBundle', Copy) {
+    from("build/resources/main/bundle") {
+        include "bundle.mjs"  // Only copy the bundle.mjs file
+    }
+    into("src/main/resources/bundle")  // Copy it into src/main/resources
+}
+
+processResources.dependsOn copyBundle
+
+processResources {
+    from("src/main/resources/bundle") {
+        include "bundle.mjs"
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE  // Exclude duplicates
+    }
+}
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.example.App'
+        attributes 'Main-Class': 'org.example.App'
+    }
+    from("src/main/resources/bundle") {
+        include "**/bundle.mjs"  // Explicitly include bundle.mjs
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE  // Exclude duplicates
     }
 }

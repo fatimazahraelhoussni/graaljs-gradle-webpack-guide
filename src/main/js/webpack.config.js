@@ -10,7 +10,7 @@ const config = {
     output: {
         path: process.env.BUILD_DIR
             ? path.resolve(process.env.BUILD_DIR)
-            : path.resolve(__dirname, '../../../build/classes/bundle'),
+            : path.resolve(__dirname, '../../build/resources/main/bundle'),
         filename: 'bundle.mjs',
         module: true,
         library: {
