@@ -1,4 +1,3 @@
-Here’s how you can integrate Node.js packages in a Java application using Gradle, similar to the Maven example:
 
 ### Using Node Packages in a Java Application with Gradle
 
