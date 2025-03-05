@@ -1,4 +1,5 @@
 import com.github.gradle.node.npm.task.NpmTask
+import org.gradle.api.tasks.Copy
 
 plugins {
     id 'java'
@@ -12,7 +13,9 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-
+application {
+    mainClass = 'org.example.App'
+}
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
@@ -49,30 +52,23 @@ tasks.register('webpackBuild', NpmTask) {
     environment = ['BUILD_DIR': "${buildDir}/resources/main/bundle"]
 }
 
-build.dependsOn tasks.webpackBuild
-
-tasks.register('copyBundle', Copy) {
-    from("build/resources/main/bundle") {
-        include "bundle.mjs"  // Only copy the bundle.mjs file
-    }
-    into("src/main/resources/bundle")  // Copy it into src/main/resources
+tasks.register('copyWebpackOutput', Copy) {
+    dependsOn tasks.webpackBuild
+    from "${buildDir}/resources/main/bundle"
+    into "build/classes/java/main/bundle"
 }
 
-processResources.dependsOn copyBundle
+processResources.dependsOn tasks.copyWebpackOutput
+processResources.dependsOn tasks.compileJava
 
-processResources {
-    from("src/main/resources/bundle") {
-        include "bundle.mjs"
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE  // Exclude duplicates
-    }
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'org.example.App'
-    }
-    from("src/main/resources/bundle") {
-        include "**/bundle.mjs"  // Explicitly include bundle.mjs
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE  // Exclude duplicates
-    }
-}
+//sourceSets {
+//    main {
+//        resources {
+//            srcDirs = ['src/main/resources', 'build/classes/java/main']
+//        }
+//    }
+//}
+//
+//jar {
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//}
