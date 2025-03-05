@@ -1,5 +1,5 @@
 import com.github.gradle.node.npm.task.NpmTask
-import org.gradle.api.tasks.Copy
+
 
 plugins {
     id 'java'
@@ -49,17 +49,19 @@ node {
 tasks.register('webpackBuild', NpmTask) {
     workingDir = file('src/main/js')
     args = ['run', 'build']
-    environment = ['BUILD_DIR': "${buildDir}/resources/main/bundle"]
+    environment = ['BUILD_DIR': "${buildDir}/classes/java/main/bundle"]
 }
 
-tasks.register('copyWebpackOutput', Copy) {
-    dependsOn tasks.webpackBuild
-    from "${buildDir}/resources/main/bundle"
-    into "build/classes/java/main/bundle"
-}
+//build.dependsOn tasks.webpackBuild
 
-processResources.dependsOn tasks.copyWebpackOutput
-processResources.dependsOn tasks.compileJava
+//tasks.register('copyBundle', Copy) {
+//    from("build/resources/main/bundle") {
+//        include "bundle.mjs"  // Only copy the bundle.mjs file
+//    }
+//    into("src/main/resources/bundle")  // Copy it into src/main/resources
+//}
+
+processResources.dependsOn tasks.webpackBuild
 
 //sourceSets {
 //    main {
