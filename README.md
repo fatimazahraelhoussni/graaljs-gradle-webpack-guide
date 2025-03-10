@@ -16,7 +16,7 @@ Clone the project repository to your local machine:
 
 ```sh
 git clone <repository-url>
-cd project-root
+cd graaljs/graaljs-gradle-webpack-guide
 ```
 
 ### Step 2: Install Dependencies
