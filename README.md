@@ -15,7 +15,7 @@ Before starting, ensure you have the following installed:
 Clone the project repository to your local machine:
 
 ```sh
-git clone <repository-url>
+git clone https://github.com/graalvm/graal-languages-demos.git
 cd graaljs/graaljs-gradle-webpack-guide
 ```
 
